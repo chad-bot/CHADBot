@@ -1,0 +1,30 @@
+<launch>
+
+	<include file="$(find baxter_moveit_config)/launch/baxter_grippers.launch"/>
+	<include file="$(find ar_tag)/launch/ar_track_baxter.launch"/>
+
+	<arg name="num_cups" default="6"/>
+
+	<node name="recvCoords"
+		  pkg="transform_to_baxter"
+		  type="recvCoords.py"
+		  output="screen" />
+
+	<node name="recvImg"
+		  pkg="trnasform_to_baxter"
+		  type="recvImg.py"
+		  output="screen" />
+
+	<node name="joint_trajectory_action_server"
+		  pkg="baxter_interface"
+		  type="joint_trajectory_action_server.py"
+		  output="screen" />
+
+	<node name="gripper_sub"
+		  pkg="main"
+		  type="gripper_sub.py"
+		  output="screen">
+		<param name="num_cups" value="$(arg num_cups)"/>
+	</node>
+
+</launch>
